@@ -70,13 +70,17 @@ joUi := $(patsubst %,js/ui/%, \
     slider.js \
 )
 
+joAllSources := $(joCore) $(joData) $(joUi)
+
 joDocInputs := CONTENTS.mdown ABOUT.mdown README.mdown $(wildcard docs/*.mdown) LICENSE.mdown
 joDocStatic := docs/doc.css docs/docbody.css docs/jodog.png
 joDocStaticTargets := $(patsubst %,ship/%,$(joDocStatic))
 
-joAllSources := $(joCore) $(joData) $(joUi)
+joThemeStatic := $(wildcard css/*.png)
+joThemeStaticTargets := $(patsubst css/%,ship/jo/%,$(joThemeStatic))
 
-all: ship/jo/jo.js ship/jo/jo_min.js ship/jo/jo.css ship/docs/index.html $(joDocStaticTargets)
+all: ship/jo/jo.js ship/jo/jo_min.js ship/jo/jo.css ship/docs/index.html
+all: $(joDocStaticTargets) $(joThemeStaticTargets)
 
 ship/jo ship/docs: %:
 	mkdir -p $@
@@ -98,6 +102,10 @@ ship/docs/index.html: $(joDocInputs) $(joAllSources) | ship/docs
 	mv $@.new $@
 
 ship/docs/%: docs/% ship/docs
+	cp $< $@.new
+	mv $@.new $@
+
+ship/jo/%: css/% ship/jo
 	cp $< $@.new
 	mv $@.new $@
 
