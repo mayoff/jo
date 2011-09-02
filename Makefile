@@ -94,12 +94,10 @@ ship/jo/jo.css: $(wildcard less/*.less)
 	mv $@.new $@
 
 ship/docs/index.html: $(joDocInputs) $(joAllSources) | ship/docs
-	mkdir -p ship/docs
 	../joDoc/jodoc --title "Jo HTML5 Mobile App Framework Documentation" --markdown "../../markdown/gruber/Markdown.pl" $^ > $@.new
 	mv $@.new $@
 
 ship/docs/%: docs/% ship/docs
-	mkdir -p ship/docs
 	cp $< $@.new
 	mv $@.new $@
 
