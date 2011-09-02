@@ -76,21 +76,21 @@ joDocStaticTargets := $(patsubst %,ship/%,$(joDocStatic))
 
 joAllSources := $(joCore) $(joData) $(joUi)
 
-all: ship/jo.js ship/jo_min.js ship/docs/index.html $(joDocStaticTargets)
+all: ship/jo/jo.js ship/jo/jo_min.js ship/docs/index.html $(joDocStaticTargets)
 
-ship/jo.js: $(joAllSources)
-	mkdir -p ship
+ship/jo ship/docs: %:
+	mkdir -p $@
+
+ship/jo/jo.js: $(joAllSources) | ship/jo
 	cat $^ > $@.new
 	mv $@.new $@
 
-ship/jo_min.js: ship/jo.js
+ship/jo/jo_min.js: ship/jo/jo.js
 	jsmin < $< > $@.new
 	mv $@.new $@
 
-ship/docs:
-	mkdir -p ship/docs
 
-ship/docs/index.html: $(joDocInputs) $(joAllSources) ship/docs
+ship/docs/index.html: $(joDocInputs) $(joAllSources) | ship/docs
 	mkdir -p ship/docs
 	../joDoc/jodoc --title "Jo HTML5 Mobile App Framework Documentation" --markdown "../../markdown/gruber/Markdown.pl" $^ > $@.new
 	mv $@.new $@
