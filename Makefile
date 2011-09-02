@@ -76,7 +76,7 @@ joDocStaticTargets := $(patsubst %,ship/%,$(joDocStatic))
 
 joAllSources := $(joCore) $(joData) $(joUi)
 
-all: ship/jo/jo.js ship/jo/jo_min.js ship/docs/index.html $(joDocStaticTargets)
+all: ship/jo/jo.js ship/jo/jo_min.js ship/jo/jo.css ship/docs/index.html $(joDocStaticTargets)
 
 ship/jo ship/docs: %:
 	mkdir -p $@
@@ -89,6 +89,9 @@ ship/jo/jo_min.js: ship/jo/jo.js
 	jsmin < $< > $@.new
 	mv $@.new $@
 
+ship/jo/jo.css: $(wildcard less/*.less)
+	lessc less/jo.less > $@.new
+	mv $@.new $@
 
 ship/docs/index.html: $(joDocInputs) $(joAllSources) | ship/docs
 	mkdir -p ship/docs
